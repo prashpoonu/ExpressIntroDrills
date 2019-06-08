@@ -37,6 +37,7 @@ for(let i=0;i<textVal.length;i++)
   app.get('/lotto',(req,res)=>{
     let winnNumArr = [];
     let numbers = req.query.arr;
+    console.log(`User Numbers : ${numbers}`);
     let nbrCorrect = 0;
     //generate 6 random numbers between 1 and 20
     for(let i = 0 ; i<6;i++)
@@ -44,19 +45,36 @@ for(let i=0;i<textVal.length;i++)
         let randNum =  Math.floor((Math.random()*20) +1);
         winnNumArr.push(randNum);
     }
+    console.log(`Winning Number List Is : ${winnNumArr}`);
     for(let i = 0; i<6; i++)
     {
-        let numbrCheck = numbers[i];
-        let winnNumLength = winnNumArr.filter(n=>n===numbrCheck);
-        if(winnNumLength.length > 0)
+        let numbrCheck = Number(numbers[i]);
+        let winnNumBrIncludes = winnNumArr.includes(numbrCheck);
+        if(winnNumBrIncludes)
         {
-            nbrCorrect++;
+          nbrCorrect++;
         }
-        console.log(`Number Check ${numbrCheck}`);
 
     }
+    if(nbrCorrect < 4)
+    {
+      res.send(`Sorry, you lose`);
+    }
+    else if(nbrCorrect===4)
+    {
+      res.send(`Congratulations, you win a free ticket`);
+    }
+    else if(nbrCorrect===5)
+    {
+      res.send(`Congratulations! You win $100!`);
+    }
+    else if(nbrCorrect===6)
+    {
+      res.send(`Wow! Unbelievable! You could have won the mega millions!`);
+    }
+    
    
-    res.send(`Hit the lotto url ! `);  
+      
   });
 
   app.listen(8000, () => {
